@@ -1,43 +1,32 @@
-import React, { useState, useEffect } from "react";
-import Nav from './Nav';
+import React, { useState,useEffect } from "react";
 
-function StudentPortal() {
+
+function StudentPortal({ user }) {
     const [students, setStudents] = useState([]);
 
     async function fetch_student_user() {
         let classData = await fetch(`http://localhost:8100/api/students/`);
         let data = await classData.json();
+        console.log(user)
         setStudents(data.students);
     }
-
-    const [items, setItems] = useState([]);
-
-    useEffect(() => {
-        const items = JSON.parse(localStorage.getItem('key'));
-        if (items) {
-        setItems(items);
-        }
-    }, []); 
 
     useEffect(() => {
         fetch_student_user();
     }, []);
 
     const studentFilter = (student) => {
-        return student.username === items;
+        return student.username === user;
     }
-
-
-
+    
     return (
         <>
-        <Nav/>
-        <h1 className='mt-4'>Student Profile</h1>
+        <h1>Student Profile</h1>
         <div className="table table-striped">
             <table>
                 <thead>
                     <tr>
-                        <th>Profile Picture</th>
+                        <th>Profile Picture HELLO</th>
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
@@ -45,7 +34,6 @@ function StudentPortal() {
                         {/* <th>Classes I'm Signed up For</th> */}
                     </tr>
                 </thead>
-
                 <tbody>
                 {students.filter(studentFilter).map(student => {
                     return (
@@ -58,7 +46,6 @@ function StudentPortal() {
                         </tr>
                     );
                 })}
-
                 </tbody>
             </table>
         </div>

@@ -9,7 +9,7 @@ sys.path.append("")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "classes_project.settings")
 django.setup()
 
-from classes_rest.models import InstructorVO, StudentVO
+from classes_rest.models import InstructorVO
 
 # Import models from classes_rest, here.
 # from classes_rest.models import InstructorVO
@@ -30,24 +30,6 @@ def get_instructor():
             }
         )
 
-def get_student():
-    print("TESTING")
-    response = requests.get("http://accounts-api:8000/api/students/")
-    print(response.status_code)
-    content = json.loads(response.content)
-    for student in content["students"]:
-        print("student: ", student)
-        StudentVO.objects.update_or_create(
-            id=student["id"],
-            defaults={
-                "username": student["username"],
-                "email": student["email"],
-                "first_name": student["first_name"],
-                "last_name": student["last_name"],
-                "phone_number": student["phone_number"]
-            }
-        )
-
 
 def poll():
     while True:
@@ -55,7 +37,6 @@ def poll():
         try:
             # Write your polling logic, here
             get_instructor()
-            get_student()
         except Exception as e:
             print(e, file=sys.stderr)
         time.sleep(60)
